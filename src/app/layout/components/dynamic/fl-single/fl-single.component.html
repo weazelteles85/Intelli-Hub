@@ -1,0 +1,95 @@
+<div class="container-fluid">
+  <div class="row">
+    <!-- <app-scripts src="" type="text/javascript"></app-scripts> -->
+  </div>
+  <!-- ***** THIS LOOP BUILDS THE ENTIRE DOM  WHICH IN THIS CASE IS A FORM ******* -->
+  <div class="{{ getColSize(field.gridColumns) }}" *ngFor="let field of schemaSelected.fields; let i=index">
+
+    <!-- ****** IF statement for each schema type here ********* -->
+    <!--text-->
+    <div *ngIf="field.type == 'text'">
+      <ng-container *ngTemplateOutlet="text; context:{ field:field }"></ng-container>
+    </div>
+    <!--textarea-->
+    <div *ngIf="field.type == 'textarea'">
+      <ng-container *ngTemplateOutlet="textarea; context:{ field:field }"></ng-container>
+    </div>
+    <!--number-->
+    <div *ngIf="field.type == 'number'">
+      <ng-container *ngTemplateOutlet="number; context:{ field:field }"></ng-container>
+    </div>
+    <!--date-->
+    <div *ngIf="field.type == 'date'">
+      <ng-container *ngTemplateOutlet="date; context:{ field:field }"></ng-container>
+    </div>
+    <!--email-->
+    <div *ngIf="field.type == 'email'">
+      <ng-container *ngTemplateOutlet="email; context:{ field:field }"></ng-container>
+    </div>
+    <!--media-->
+    <div *ngIf="field.type == 'media'">
+      <ng-container *ngTemplateOutlet="media; context:{ field:field }"></ng-container>
+    </div>
+    <!-- markdown-editor -->
+    <div *ngIf="field.type == 'markdown-editor'">
+      <ng-container *ngTemplateOutlet="markdownEditor; context:{ field:field }"></ng-container>
+    </div>
+
+  </div> <!-- For Loop Ends Here-->
+</div>
+
+
+
+
+<!-- ***************** TEMPLATES FOR EACH SCHEMA.FIELD IS BELLOW HERE ********************* -->
+
+<ng-template #text let-fieldContent="field">
+  <div>
+    <div [class]="fieldContent.description" *ngIf="getContentFromKey(fieldContent.key) as content">
+      <span *ngIf="showFieldName(fieldContent)"><strong>{{ fieldContent.title }}:</strong></span>
+      {{ content }}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #textarea let-fieldContent="field">
+  <div>
+    <div *ngIf="getContentFromKey(fieldContent.key) as content">
+      <span *ngIf="showFieldName(fieldContent)"><strong>{{ fieldContent.title }}:</strong></span>
+      <p>{{ content }}</p>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #number let-fieldContent="field">
+  <div>
+    <div *ngIf="getContentFromKey(fieldContent.key) as content">
+      <p>{{ content }}</p>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #date let-fieldContent="field">
+
+</ng-template>
+
+<ng-template #email let-fieldContent="field">
+  <div>
+    <div *ngIf="getContentFromKey(fieldContent.key) as content">
+      <p>{{ content }}</p>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #media let-fieldContent="field">
+  <div class="col col-xs-12">
+    <img src="{{ getMediaFromKey(fieldContent.key) }}" alt="">
+  </div>
+</ng-template>
+
+<ng-template #markdownEditor let-fieldContent="field">
+  <div>
+    <div [innerHtml]="getHtmlCodeFromKey(fieldContent.key)">
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,26 @@
+<app-page-header [heading]="'Account Setting'" [icon]="'fa fa-fw fa-wrench'"></app-page-header>
+
+<div class="row">
+    <div class="col-lg-6">
+      <form [formGroup]="changePasswordForm" (submit)="changePassword()">
+          <div class="form-content">       
+              <div class="form-group">
+                  <label>Enter current password</label>
+                  <input formControlName="currentPassword" class="form-control" type="password">
+                  <div *ngIf="currentPassword.touched && currentPassword.invalid" class="text-danger">
+                      <div *ngIf="currentPassword.errors.required" >Please enter current password</div>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label>Enter new password</label>
+                  <input formControlName="newPassword" class="form-control" type="password">
+                  <div *ngIf="newPassword.touched && newPassword.invalid" class="text-danger">
+                      <div *ngIf="newPassword.errors.required" >Please enter new password</div>
+                  </div>
+              </div>
+              
+          </div>        
+          <button style="float:right;" class="btn btn-primary" type="submit" [disabled]="changePasswordForm.invalid" >Change password</button>
+      </form>   
+    </div>
+</div>       

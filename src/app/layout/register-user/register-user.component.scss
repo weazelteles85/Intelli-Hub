@@ -1,0 +1,113 @@
+// shared css for the login and signup page
+@import "../../login/login.component.scss";
+.form-control.ng-touched.ng-invalid {
+    border: 2px solid red;
+}
+
+.spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%,-50%); /* IE 9 */
+    -webkit-transform: translate(-50%,-50%); /* Safari */
+    transform: translate(-50%,-50%); /* Standard syntax */
+    width: 70px;
+    height: 70px;
+    > div {
+        width: 18px;
+        height: 18px;
+        background-color: #333;
+
+        border-radius: 100%;
+        display: inline-block;
+        -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+        animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+    }
+    .bounce1 {
+        -webkit-animation-delay: -0.32s;
+        animation-delay: -0.32s;
+    }
+
+    .bounce2 {
+        -webkit-animation-delay: -0.16s;
+        animation-delay: -0.16s;
+    }
+}
+
+.customDropDown {
+    border-radius: 10px;
+    background: #ffffff;
+    width: 90%;
+}
+
+.alignEnd{
+    text-align: end;
+}
+
+.alignCenter {
+    text-align: center;
+}
+
+.customDropDown:hover {
+    cursor: pointer;
+}
+
+.container {
+    margin-top: 100px
+}
+
+.permissionItem:hover {
+    color: white;
+    background: #003147;
+    cursor: pointer;
+}
+
+
+.form-content {
+    border-radius: 10px;
+    padding: 60px;
+    background-color: #004360;
+}
+
+.rounded-btn {
+    margin-top: 10px;
+    -webkit-border-radius: 50px;
+    border-radius: 50px;
+    color: rgba(255, 255, 255, 0.8);
+    background: $topnav-background-color;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    font-size: 18px;
+    line-height: 40px;
+    padding: 0 25px;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.rounded-btn:hover,
+    .rounded-btn:focus,
+    .rounded-btn:active,
+    .rounded-btn:visited {
+        color: rgba(255, 255, 255, 1);
+        border: 2px solid rgba(255, 255, 255, 1);
+        outline: none;
+    }
+
+.rounded-btn:disabled {
+    cursor: not-allowed;
+    }
+
+    
+.toastBox {
+    text-align: center;
+    position: relative;
+    color: white;
+    padding: 10px;
+    background-color: #003147;
+    border: 2px solid #ced4da;
+    border-radius: 8px;
+}
+

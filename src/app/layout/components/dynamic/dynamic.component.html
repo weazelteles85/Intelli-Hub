@@ -1,0 +1,23 @@
+<!-- the header of this page -->
+<div class="row">
+  <div class="col col-xs-12">
+    <h2>{{ navigationTitle }}</h2>
+  </div>
+</div>
+<hr>
+<!-- DISPLAY A COMPONENT DEPENDING ON IF SCHEMA IS SINGLE, FORM OR COLLECTION -->
+<div *ngIf="localSchemaDisplaying as schema; else notAvailable">
+  <div *ngIf="schema.type == 'single'">
+    <app-fl-single [schemaSelected]="schema"></app-fl-single>
+  </div>
+  <div *ngIf="schema.type == 'form'">
+    <app-fl-form [schemaSelected]="schema"></app-fl-form>
+  </div>
+  <div *ngIf="schema.type == 'collection'">
+    <app-fl-collection [schemaSelected]="schema"></app-fl-collection>
+  </div>
+</div>
+
+<ng-template #notAvailable>
+  <h3>Template not available, please select a navigation</h3>
+</ng-template>

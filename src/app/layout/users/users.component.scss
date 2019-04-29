@@ -1,0 +1,108 @@
+.form-control.ng-touched.ng-invalid {
+    border: 2px solid red;
+}
+
+.list-group-item {
+    margin: 2px;
+}
+
+.list-group-item:hover {
+    color: white;
+    background: #003147;
+    cursor: pointer;
+}
+
+.filterBar {
+    margin-top: 2px;
+}
+
+.marginTop {
+    margin-top: 20px;
+}
+
+.locationList {
+    padding-left: 4px;
+    padding-right: 4px;
+    margin-top: 3px;
+    margin-left: 6px;
+    border: 2px solid #003147;
+    color: white;
+    background: #003147;
+    border-radius: 10px;
+}
+
+.permList {
+    position: relative;
+    top: 5px;
+    padding: 6px;
+    margin-top: 3px;
+    margin-left: 6px;
+    border: 2px solid #003147;
+    color: white;
+    background: #003147;
+    border-radius: 10px;
+}
+
+.permissionGroup {
+    position: relative;
+    top: -10px;
+    border: 2px solid #003147;
+    background-color: #ced4da;
+    border-radius: 6px;
+}
+
+.permissionGroupSmall {
+    position: relative;
+    right: 120px;
+    border: 2px solid #003147;
+    background-color: #ced4da;
+    border-radius: 6px;
+}
+
+.btn-sm {
+    margin-top: 5px;
+}
+
+.permissionItem {
+    position: relative;
+    left: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 10pt;
+    height: 30px;
+}
+
+.permissionSelector {
+    padding-top: 4px;
+    border: 1px solid #ced4da;
+    background: #e9ecef;
+    border-radius: 4px;
+}
+
+.permissionSelectorEditMode {
+    padding-top: 4px;
+    border: 1px solid #ced4da;
+    background: white;
+    border-radius: 4px;
+}
+
+.permissionSelectorEditMode:hover {
+    cursor: pointer;
+}
+
+.toastBox {
+    position: absolute;
+    top: 50%;
+    left: 40%;
+    color: white;
+    padding: 10px;
+    background-color: #003147;
+    border: 2px solid #ced4da;
+    border-radius: 8px;
+}
+
+.disabled {
+    background: #e2e2e2;
+}
+
+

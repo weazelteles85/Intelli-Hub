@@ -1,0 +1,97 @@
+<div class="row">
+  <div class="col col-xs-12">
+    <h2>Create Users</h2>
+  </div>
+</div>
+<hr>
+<h3 *ngIf="authService.createUserMsg" class="toastBox">{{ authService.createUserMsg }}</h3>
+<div class="container h-100">
+  <div class="row h-100 justify-content-center align-items-center">
+    <div class="col-6 h-100">
+      <ng-container *ngIf="!authService.isLoading; else loading">
+        <form [formGroup]="formSignup" (ngSubmit)="onSubmitForm()">
+          <div class="form-content">
+            <h2 class="title">Create New User</h2>
+            <div class="form-group">
+              <input formControlName="firstName" type="text" class="form-control input-underline input-lg"
+                id="txtfirstName" matTooltip="Optional" placeholder="First Name">
+            </div>
+            <div class="form-group">
+              <input formControlName="lastName" type="text" class="form-control input-underline input-lg"
+                matTooltip="Optional" placeholder="Last Name">
+            </div>
+            <div class="form-group">
+              <input formControlName="userName" type="text" class="form-control input-underline input-lg"
+                matTooltip="User Name is required" placeholder="User Name">
+              <div *ngIf="userName.touched && userName.invalid" class="alert alert-danger" hidden>
+              </div>
+            </div>
+            <!-- <div class="form-group">
+                  <input formControlName="location" type="text" class="form-control input-underline input-lg"
+                    matTooltip="User Name is required" placeholder="Location">
+                  <div *ngIf="userName.touched && userName.invalid" class="alert alert-danger" hidden>
+                  </div>
+                </div> -->
+            <div class="form-group">
+                  <div class="row">
+                    <div class="col col-4">
+                      <h4 style="color: rgba(255, 255, 255, 0.8);">Permission: </h4>
+                    </div>
+                    <div (click)="toggleShowPermission()" class="col col-7 customDropDown">
+                      <div class="row">
+                        <div class="col col-10">{{ selectedPermName }}</div>
+                        <div class="col col-2 alignEnd">
+                          <div class="fa fa-caret-down"></div>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="showPermissionGroup; else hideGroup">
+                        <div class="row">
+                          <div class="col col-12" *ngFor="let perm of permService.localPermissionList">
+                            <div (click)="setPermission(perm)" class="list-group-item permissionItem">{{ perm.name }}</div>
+                          </div>
+                        </div>
+                      </ng-container>
+                      <ng-template #hideGroup></ng-template>
+                    </div>
+                  </div>
+                </div>
+            <div class="form-group">
+              <input formControlName="email" type="text" class="form-control input-underline input-lg" id="txtEmail"
+                matTooltip="Email is required" placeholder="Email">
+              <div *ngIf="email.touched && email.invalid" class="alert alert-danger" hidden>
+                <div *ngIf="email.errors.required" class="alert alert-danger" hidden>
+                </div>
+                <div *ngIf="email.errors.email" class="alert alert-danger" hidden>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <input formControlName="password" type="password" class="form-control input-underline input-lg"
+                id="txtPassword" matTooltip="Password must be minimum 8 characters" placeholder="Password">
+              <div *ngIf="password.touched && password.invalid" class="alert alert-danger" hidden>
+              </div>
+            </div>
+            <div class="form-group">
+              <input (input)="checkIfPasswordsMatches($event.target.value)" 
+              formControlName="confirmPassword" type="password" class="form-control input-underline input-lg"
+                id="txtRepPassword" matTooltip="Password must be matched" placeholder="Repeat Password">
+                <p *ngIf="passMessage" style="color:white">{{ passMessage }}</p>
+              <div *ngIf="confirmPassword.touched && confirmPassword.invalid" class="alert alert-danger" hidden>
+              </div>
+            </div>
+            <div class="row justify-content-md-center">
+              <button [disabled]="!formSignup.valid" type="submit" class="btn rounded-btn">Create User</button>
+            </div>
+          </div>
+        </form>
+      </ng-container>
+      <ng-template #loading>
+        <div class="spinner">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

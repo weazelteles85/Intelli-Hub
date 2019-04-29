@@ -1,0 +1,68 @@
+.memberid{
+    bottom: 197px;
+    position: absolute;
+    left: 140px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Times New Roman', Times, serif
+}
+
+.bin{
+    bottom: 176px;
+    position: absolute;
+    left: 84px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Times New Roman', Times, serif
+}
+.groupId{
+    bottom: 155px;
+    position: absolute;
+    left: 102px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Times New Roman', Times, serif
+}
+.customcontainer {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+}
+
+img {
+    display: block;
+    border: 1px;
+    border-style: dotted;
+}
+
+.container1{
+    position: relative;
+    display: block;
+}
+
+@media only screen and (max-width: 600px) {
+    img{
+        width: 100%;
+    }
+    .memberid{
+        bottom: 97px;
+        position: absolute;
+        left: 68px;
+        font-size: 8px;
+        font-family: 'Times New Roman', Times, serif
+    }
+    .bin{
+        bottom: 86px;
+        position: absolute;
+        left: 40px;
+        font-size: 8px;
+        font-family: 'Times New Roman', Times, serif
+    }
+    .groupId{
+        bottom: 77px;
+        position: absolute;
+        left: 50px;
+        font-size: 8px;
+        font-family: 'Times New Roman', Times, serif
+    }
+}

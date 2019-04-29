@@ -1,0 +1,98 @@
+<div class="container">
+  <div class="row">
+    <div class="col text-center">
+      <button (click)="isFormVisible = true" type="button" class="btn-lg btn-outline-primary">New Entry</button>
+    </div>
+  </div>
+</div>
+<div *ngIf="isFormVisible" class="container formColor">
+  <form [formGroup]="schemaForm" (ngSubmit)="submitForm()">
+    <!-- ***** THIS LOOP BUILDS THE ENTIRE DOM  WHICH IN THIS CASE IS A FORM ******* -->
+    <div class="{{ getColSize(field.gridColumns) }}" *ngFor="let field of schemaSelected.fields; let i=index">
+
+      <!-- ****** IF statement for each schema type here ********* -->
+      <!--text-->
+      <div *ngIf="field.type == 'text'">
+        <ng-container *ngTemplateOutlet="text; context:{ field:field }"></ng-container>
+      </div>
+      <!--number-->
+      <div *ngIf="field.type == 'number'">
+        <ng-container *ngTemplateOutlet="number; context:{ field:field }"></ng-container>
+      </div>
+      <!--date-->
+      <div *ngIf="field.type == 'date'">
+        <ng-container *ngTemplateOutlet="date; context:{ field:field }"></ng-container>
+      </div>
+      <!--email-->
+      <div *ngIf="field.type == 'email'">
+        <ng-container *ngTemplateOutlet="email; context:{ field:field }"></ng-container>
+      </div>
+      <!--textarea-->
+      <div *ngIf="field.type == 'textarea'">
+        <ng-container *ngTemplateOutlet="textarea; context:{ field:field }"></ng-container>
+      </div>
+
+    </div> <!-- For Loop Ends Here-->
+    <hr>
+    <div class="row">
+      <div class="col text-left">
+        <button (click)="isFormVisible = false; clearForm();" type="button" class="btn btn-danger">Cancel</button>
+      </div>
+      <div class="col text-right">
+        <button type="submit" [disabled]="!schemaForm.valid" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<app-fl-collection [schemaSelected]="schemaSelected"></app-fl-collection>
+
+<!-- ***************** TEMPLATES FOR EACH SCHEMA.FIELD IS BELLOW HERE ********************* -->
+
+<ng-template #text let-fieldContent="field">
+  <div [formGroup]="schemaForm">
+    <strong>{{fieldContent.title}}:</strong>
+    <div class="input-group mb-3">
+      <input placeholder="{{fieldContent.description}}" type="text" class="form-control"
+        formControlName="{{fieldContent.key}}">
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #number let-fieldContent="field">
+  <!-- <div class="row">
+    <div class="col col-xs-12">
+      <div>Number: {{ fieldContent.defaultValue }} </div>
+    </div>
+  </div> -->
+</ng-template>
+
+<ng-template #date let-fieldContent="field">
+  <div class="input-group mb-3" [formGroup]="schemaForm">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="basic-addon1">{{fieldContent.title}}</span>
+    </div>
+    <input placeholder="{{fieldContent.defaultValue}}" type="date" class="form-control"
+      formControlName="{{fieldContent.key}}">
+  </div>
+</ng-template>
+
+<ng-template #email let-fieldContent="field">
+    <div [formGroup]="schemaForm">
+        <strong>{{fieldContent.title}}:</strong>
+        <div class="input-group mb-3">
+          <input placeholder="{{fieldContent.description}}" type="text" class="form-control"
+            formControlName="{{fieldContent.key}}">
+        </div>
+      </div>
+</ng-template>
+
+<ng-template #textarea let-fieldContent="field">
+  <div [formGroup]="schemaForm">
+    <strong>{{fieldContent.title}}:</strong>
+    <div class="input-group mb-3">
+      <textarea placeholder="{{fieldContent.description}}" type="textArea" rows="5" class="form-control"
+        formControlName="{{fieldContent.key}}"></textarea>
+    </div>
+  </div>
+</ng-template>

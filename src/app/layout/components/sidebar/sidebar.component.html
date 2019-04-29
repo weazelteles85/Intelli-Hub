@@ -1,0 +1,93 @@
+<nav class="sidebar" [ngClass]="{sidebarPushRight: isActive}">
+    <div class="list-group">
+        <!-- <a [routerLink]="['/charts']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-bar-chart-o"></i>&nbsp;{{ 'Charts' | translate }}
+        </a> -->
+        <div *ngIf="isSchemaPermited('users')">
+            <a [routerLink]="['/users']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+                <i class="fa fa-users"></i>&nbsp;{{ 'Users' | translate }}
+            </a>
+        </div>
+        <div *ngIf="isSchemaPermited('createUser')">
+            <a [routerLink]="['/register-user']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+                <i class="fa fa-user-plus"></i>&nbsp;{{ 'Create Users' | translate }}
+            </a>
+        </div>
+
+        <div>
+            <!-- ********   this for loops builds the entire navigation list ********  -->
+            <div *ngFor="let navItem of localMainAppNavigation">
+                <div *ngIf="navItem.childIndex && navItem.parentIndex == 0; else toLink">
+                    <ng-container *ngTemplateOutlet="isParent;context:{navItem: navItem}"></ng-container>
+                </div>
+                <ng-template #toLink>
+                    <div *ngIf="navItem.parentIndex == 0">
+                        <ng-container *ngTemplateOutlet="linkDisplay;context:{navItem: navItem}"></ng-container>
+                    </div>
+                </ng-template>
+                <ng-template #isParent let-navValue="navItem">
+                    <!--Displays if Permission Level Accepts it-->
+                    <div *ngIf="isSchemaPermited(navValue.component)">
+                        <div *ngIf="navValue.childIndex">
+                            <div class="list-group-item parentItem">
+                                <div (click)="showHideSubmenu(navValue)" class="row">
+                                    <div class="col-xs-6">
+                                        <span>
+                                            <i class="{{ navValue.cssClass }}"></i>
+                                            {{ navValue.title }}
+                                        </span>
+                                    </div>
+                                    <div class="col col-xs-2 alignEnd">
+                                        <div *ngIf="navValue.isActive; then minusIcon else plusIcon"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="subMenuItem">
+                                <div class="row" *ngIf="navValue.isActive">
+                                    <div *ngFor="let childNavItem of navValue.childIndex">
+                                        <div *ngIf="childNavItem.childIndex; else isLink">
+                                            <ng-container *ngTemplateOutlet="isParent;context:{ navItem:childNavItem }">
+                                            </ng-container>
+                                        </div>
+                                        <ng-template #isLink>
+                                            <ng-container
+                                                *ngTemplateOutlet="linkDisplay;context:{ navItem:childNavItem }">
+                                            </ng-container>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template #linkDisplay let-navValue="navItem">
+                    <!--Displays if Permission Level Accepts it-->
+                    <div *ngIf="isSchemaPermited(navValue.component)">
+                        <div class="row">
+                            <div class="col col-xs-12">
+                                <a [routerLink]="['/dynamic']" [queryParams]="{ page: navValue.title }" 
+                                (click)="navToDynamic(navValue)" [routerLinkActive]="['router-link-active']"
+                                    class="list-group-item longerWidth">
+                                    <i class="{{ navValue.cssClass }}"></i>
+                                    {{ navValue.title | translate }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+        <!-- <div *ngIf="dataManager.fl_Navigation | async as navigation">
+            <div *ngFor="let navItem of navigation[0].items; let i=index">
+                {{ navItem.title }}
+            </div>
+        </div> -->
+    </div>
+</nav>
+
+<ng-template #plusIcon>
+    <i class="fa fa-plus"></i>
+</ng-template>
+<ng-template #minusIcon>
+    <i class="fa fa-minus"></i>
+</ng-template>

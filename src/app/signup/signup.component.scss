@@ -1,0 +1,5 @@
+// shared css for the login and signup page
+@import "../login/login.component.scss";
+.form-control.ng-touched.ng-invalid {
+    border: 2px solid red;
+}

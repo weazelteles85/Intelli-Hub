@@ -1,0 +1,39 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'Charts'" [icon]="'fa-bar-chart-o'"></app-page-header>
+    <div class="row">
+            <div class="col col-sm-6">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                                Transactions per day
+                            <select style="float:right;" [(ngModel)]="selectedDuration" (ngModelChange)="onChangeDateTransactionPerDay()">
+                                    <option *ngFor="let duration of durations" [value]= "duration.value">
+                                       {{duration.value}} days
+                                     </option>
+                            </select>    
+                        </div>
+                        <div class="card-body" *ngIf="perDayChartLoaded">
+                            <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType" >
+                            </canvas>
+                        </div>
+                </div>
+        </div>
+        <div class="col col-sm-6">
+            <div class="card mb-3">
+                <div class="card-header">
+                    Transaction Amount
+                    <select style="float:right;" [(ngModel)]="selectedDurationTransAmount" (ngModelChange)="onChangeDateTransAmount()">
+                            <option *ngFor="let duration of durations" [value]= "duration.value">
+                               {{duration.value}} days
+                             </option>
+                    </select>    
+                    
+                </div>
+                
+                <div class="card-body" *ngIf="transactionAmount">
+                    <canvas  baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType">
+                    </canvas>
+                </div>
+            </div>
+        </div>  
+        </div>  
+        

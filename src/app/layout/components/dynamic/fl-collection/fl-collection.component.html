@@ -1,0 +1,117 @@
+<!--****** MULTIPLE CONTENT AREA (FORMS WILL USE THIS MOST)***** -->
+<div *ngIf="multipleContents.length > 1">
+  <div class="container">
+    <h4>Multiple entries found, please select one</h4>
+    <div class="row">
+      <div (click)="setContent(i)" class="contentButton" *ngFor="let content of multipleContents; let i=index">
+        <div class="col-xs-4">
+          <div class="container-fluid">
+            <div class="row align-items-center">
+              <div class="col-xs-2">
+                <h3>{{ i + 1 }})</h3>
+              </div>
+              <div class="col">
+                <div *ngIf="findProperContentKey(content) as key; else useID">
+                  {{ key }}: {{ content[key] }}
+                </div>
+                <ng-template #useID>
+                  Entry ID: {{ content.id }}
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ************* SINGLE CONTENT AREA BELLOW **************** -->
+<div class="container-fluid">
+  <div class="row">
+    <ng-container *ngIf="currentContent; else noContent">
+      <!-- ***** THIS LOOP BUILDS THE ENTIRE DOM  WHICH IN THIS CASE IS A COLLECTION ******* -->
+
+      <!-- loop through Fields of Content -->
+      <div class="{{ getColSize(field.gridColumns) }}" *ngFor="let field of schemaSelected.fields; let i=index">
+        <!-- ****** IF statement for each schema type here ********* -->
+        <!--text-->
+        <div *ngIf="field.type == 'text'">
+          <ng-container *ngTemplateOutlet="text; context:{ field:field }"></ng-container>
+        </div>
+        <!--number-->
+        <div *ngIf="field.type == 'number'">
+          <ng-container *ngTemplateOutlet="number; context:{ field:field }"></ng-container>
+        </div>
+        <!--date-->
+        <div *ngIf="field.type == 'date'">
+          <ng-container *ngTemplateOutlet="date; context:{ field:field }"></ng-container>
+        </div>
+        <!--email-->
+        <div *ngIf="field.type == 'email'">
+          <ng-container *ngTemplateOutlet="email; context:{ field:field }"></ng-container>
+        </div>
+        <!--textarea-->
+        <div *ngIf="field.type == 'textarea'">
+          <ng-container *ngTemplateOutlet="textarea; context:{ field:field }"></ng-container>
+        </div>
+        <!-- markdown-editor -->
+        <div *ngIf="field.type == 'markdown-editor'">
+          <ng-container *ngTemplateOutlet="markdownEditor; context:{ field:field }"></ng-container>
+        </div>
+
+      </div> <!-- For Loop Ends Here-->
+
+    </ng-container>
+    <ng-template #noContent>
+
+    </ng-template>
+  </div>
+</div>
+<ng-template #noContent>
+  <!--IF there are no content to display-->
+  <div *ngIf="!isLoading" class="col col-xs-12">
+    <h3>No Content Found</h3>
+    <h5>Please Make sure to create a content based on the Schema you selected</h5>
+  </div>
+</ng-template>
+
+<!-- ***************** TEMPLATES FOR EACH SCHEMA.FIELD IS BELLOW HERE ********************* -->
+
+<ng-template #text let-schemaField="field">
+  <div>
+    <span *ngIf="showFieldName(schemaField)"><strong>{{ schemaField.title }}:</strong></span>
+    {{ getContentFromKey(schemaField.key) }}
+  </div>
+</ng-template>
+
+<ng-template #number let-schemaField="field">
+  <div>
+    <span *ngIf="showFieldName(schemaField)"><strong>{{ schemaField.title }}:</strong></span>
+    {{ getContentFromKey(schemaField.key) }}
+  </div>
+</ng-template>
+
+<ng-template #date let-schemaField="field">
+
+</ng-template>
+
+<ng-template #email let-schemaField="field">
+  <div>
+    <span *ngIf="showFieldName(schemaField)"><strong>{{ schemaField.title }}:</strong></span>
+    {{ getContentFromKey(schemaField.key) }}
+  </div>
+</ng-template>
+
+<ng-template #textarea let-schemaField="field">
+  <div>
+    <span *ngIf="showFieldName(schemaField)"><strong>{{ schemaField.title }}:</strong></span>
+    {{ getContentFromKey(schemaField.key) }}
+  </div>
+</ng-template>
+
+<ng-template #markdownEditor let-schemaField="field">
+  <div>
+    <span *ngIf="showFieldName(schemaField)"><strong>{{ schemaField.title }}:</strong></span>
+    <div [innerHtml]="getHtmlCodeFromKey(schemaField.key)"></div>
+  </div>
+</ng-template>

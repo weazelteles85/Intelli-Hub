@@ -1,0 +1,26 @@
+.list-group-item {
+    width: 300px;
+    height: 200px;
+    margin: 5px;
+    float: left;
+}
+
+.list-group-item:hover {
+    cursor: pointer;
+    color: white;
+    background: #004360;
+}
+
+
+.list-group-item i {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 60pt;
+}
+
+.list-group-item p {
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 16pt;
+}

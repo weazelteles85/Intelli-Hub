@@ -1,0 +1,238 @@
+<div class="row">
+  <div class="col col-xs-12">
+    <h2>Users</h2>
+  </div>
+</div>
+<hr>
+<div class="container-fluid">
+  <div class="row">
+    <div scroll class="col-4">
+      <!-- FILTER BY EMAIL SEARCH BAR -->
+      <div class="input-group col-md-12 filterBar">
+        <input type="text" class="search-query form-control" placeholder="Filter By Email"
+          (input)="onFilterEmailChange($event.target.value)" />
+        <span class="input-group-btn">
+          <button class="btn btn-primary" type="button">
+            <span class="fa fa-search"></span>
+          </button>
+        </span>
+      </div>
+      <!-- FILTER BY CLIENT SEARCH BAR -->
+      <div *ngIf="Permission.PermissionSubj | async as permission">
+        <div *ngIf="isSuperAdmin(permission)" class="input-group col-md-12 filterBar">
+          <input type="text" class="search-query form-control" placeholder="Filter By Client"
+            (input)="onFilterClientChange($event.target.value)" />
+          <span class="input-group-btn">
+            <button class="btn btn-primary" type="button">
+              <span class="fa fa-search"></span>
+            </button>
+          </span>
+        </div>
+      </div>
+      <!-- LIST OF USERS STARTS BELLOW THIS -->
+      <div *ngFor="let user of usersList;">
+        <div *ngIf="isNotFiltered(user)">
+          <ul class="list-group">
+            <li (click)="setSelectedUser(user)" [class]="setClassIfDisabled(user)">
+              <div><strong>Display Name:</strong> {{ user.displayName }}</div>
+              <div><strong>Email:</strong> {{ user.email }}</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- THE SELECTED USER IS DISPLAYED BELLOW -->
+    <ng-container *ngIf="!authService.isLoading; else loading">
+      <div class="col-8">
+        <div *ngIf="Permission.PermissionSubj | async as permission">
+          <div *ngIf="hasCreatePermission(permission)" class="text-center">
+            <button class="btn btn-primary" (click)="onNewUserBtnClick()">NEW USER</button>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-center marginTop" *ngIf="!isCreateUserMode"><span *ngIf="isEditMode">Edit </span>User</h3>
+          <h3 class="text-center marginTop" *ngIf="isCreateUserMode">New User</h3>
+          <!-- FORM BEGINS HERE -->
+          <!-- USER ENABLED OR DISABLED -->
+          <div *ngIf="selectedUser && !isCreateUserMode" class="col text-right">
+            <div *ngIf="selectedUser.enabled == 'Yes'">
+              User is: Enabled
+              <button (click)="disableUser()" *ngIf="isEditMode" style="margin-bottom:4px"
+                class="btn btn-danger">Disable User</button>
+            </div>
+            <div *ngIf="selectedUser.enabled == 'No'">
+              User is: Disabled
+              <button (click)="enableUser()" *ngIf="isEditMode" style="margin-bottom:4px" class="btn btn-success">Enable
+                User</button>
+            </div>
+          </div>
+          <!-- FORM -->
+          <form *ngIf="Permission.PermissionSubj | async as permission"
+            (input)="invalidateFormIfPermissionNotSelected()" [formGroup]="editUserForm">
+            <div *ngIf="isSuperAdmin(permission)" class="input-group mb-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">ID</span>
+              </div>
+              <input #idInput disabled="true" type="text" class="form-control">
+            </div>
+            <!-- DISPLAY NAME -->
+            <div class="input-group mb-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Display Name</span>
+              </div>
+              <input formControlName="displayName" type="text" class="form-control">
+            </div>
+            <!-- FIRST NAME -->
+            <div class="input-group mb-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">First Name</span>
+              </div>
+              <input formControlName="firstName" type="text" class="form-control">
+            </div>
+            <!-- LAST NAME -->
+            <div class="input-group mb-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Last Name</span>
+              </div>
+              <input formControlName="lastName" type="text" class="form-control">
+            </div>
+            <!-- CLIENT -->
+            <div *ngIf="isSuperAdmin(permission)" class="input-group mb-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Client</span>
+              </div>
+              <input formControlName="client" type="text" class="form-control">
+            </div>
+            <!-- LOCATIONS -->
+            <!-- THE LOCATIONS FEATURES IS BEING COMMENTED OUT SINCE INTELLI-HUB DOES NOT CURRENTLY NEED THIS FEATURE-->
+            <!-- THE PERMISSIONS FEATURE WILL HANDLE FUNCTIONALITY OF LOCATIONS -->
+
+            <!-- <div class="input-group mb-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Locations</span>
+              </div>
+              <div *ngFor="let location of localLocationsList">
+                <div class="locationList">
+                  <span>{{ location }} </span>
+                  <button (click)="deleteLocation(location)" *ngIf="isEditMode || isCreateUserMode"
+                    class="btn btn-danger btn-sm" type="button">X</button>
+                </div>
+              </div>
+              <div *ngIf="isEditMode || isCreateUserMode">
+                <div class="input-group mb-1 col align-self-end">
+                  <input #locationInput type="text" class="form-control" placeholder="Location" aria-label="Location"
+                    aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                    <button (click)="addLocation(locationInput, locationInput.value)"
+                      class="btn btn-outline-success">Add</button>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+
+            <!-- USER PERMISSION -->
+            <!-- INTELLI-HUB WANTS TO NAME THIS LOCATIONS AND CREATE PERMISSIONS BASED ON LOCATIONS THAT USERS WILL HAVE/USE -->
+            <!-- IN THE FRONT END THIS WILL BE CALLED LOCATIONS EVEN THOUGH ON FLAMELINK ITS PERMISSIONS -->
+            <div class="input-group mb-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">User Location</span>
+              </div>
+              <span (click)="openPermissionGroup()" *ngIf="localSelectedUserPermission" [class]="permissionClass">
+                {{ localSelectedUserPermission.name }}
+                <i *ngIf="isEditMode || isCreateUserMode" class="fa fa-arrow-down"></i>
+              </span>
+            </div>
+            <ul *ngIf="isSelectPermission" class="col-10 offset-2 list-group text-center permissionGroup">
+              <li (click)="setPermission(permission)" class="list-group-item text-center permissionItem"
+                *ngFor="let permission of Permission.localPermissionList">
+                {{ permission.name }}
+              </li>
+            </ul>
+            <!-- PERMISSIONS AVAILABLE -->
+            <!-- INTELLI-HUB WANTS TO NAME THIS LOCATIONS AND CREATE PERMISSIONS BASED ON LOCATIONS THAT USERS WILL HAVE/USE -->
+            <!-- IN THE FRONT END THIS WILL BE CALLED LOCATIONS EVEN THOUGH ON FLAMELINK ITS PERMISSIONS -->
+            <div *ngIf="selectedUserPermissionList || isEditMode" class="input-group mb-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Locations</span>
+              </div>
+              <div *ngFor="let name of permNames">
+                <div class="locationList">
+                  <span>{{ name }} </span>
+                  <button (click)="deletePermission(name)" *ngIf="isEditMode || isCreateUserMode"
+                    class="btn btn-danger btn-sm" type="button">X</button>
+                </div>
+              </div>
+              <div *ngIf="isEditMode || isCreateUserMode">
+                <div class="input-group mb-1 col align-self-end">
+                  <div class="input-group-append">
+                    <button (click)="isSelectUserPermission = true" class="btn btn-outline-success btn-sm">Add
+                      Location</button>
+                  </div>
+                  <ul *ngIf="isSelectUserPermission"
+                    class="col-10 offset-2 list-group text-center permissionGroupSmall">
+                    <li (click)="addToUserPermissionList(permission)" class="list-group-item text-center permissionItem"
+                      *ngFor="let permission of Permission.localPermissionList">
+                      {{ permission.name }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- EMAIL -->
+            <div class="input-group mb-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Email</span>
+              </div>
+              <input formControlName="email" type="email" class="form-control">
+            </div>
+            <!-- PASSWORD -->
+            <div *ngIf="isCreateUserMode" class="input-group mb-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Password</span>
+              </div>
+              <input formControlName="password" type="password" class="form-control"
+                matTooltip="Password must be minimum 8 characters">
+            </div>
+            <!-- CONFIRM PASSWORD -->
+            <div *ngIf="isCreateUserMode" class="input-group mb-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Confirm Password</span>
+              </div>
+              <input (input)="checkIfPasswordsMatches($event.target.value)" formControlName="confirmPassword"
+                type="password" class="form-control" matTooltip="Password must be matched">
+            </div>
+            <p *ngIf="passMessage">{{ passMessage }}</p>
+            <!-- CONTROL BUTTONS -->
+            <div *ngIf="isEditMode || isCreateUserMode" class="row">
+              <div class="col"><button class="btn btn-danger" (click)="closeEdit()">Cancel</button></div>
+              <div *ngIf="!isCreateUserMode" class="col text-right">
+                <button class="btn btn-success" (click)="onUpdateUser()">Save</button>
+              </div>
+              <div *ngIf="!isEditMode" class="col text-right">
+                <button class="btn btn-success" (click)="onCreateNewUser()" [disabled]="!editUserForm.valid">Create
+                  User</button>
+              </div>
+            </div>
+          </form>
+          <div *ngIf="Permission.PermissionSubj | async as permission">
+            <div *ngIf="hasEditPermission(permission)" class="text-center">
+              <button *ngIf="!isEditMode && !isCreateUserMode && selectedUser" class="btn btn-success"
+                (click)="openEdit()">Edit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<!-- <button (click)="test()">Test</button> -->
+<ng-template #loading>
+  <div class="spinner">
+    <div class="bounce1"></div>
+    <div class="bounce2"></div>
+    <div class="bounce3"></div>
+  </div>
+</ng-template>
+<h3 *ngIf="toastMsg" class="toastBox">{{ toastMsg }}</h3>
+<h3 *ngIf=" authService.createUserMsg" class="toastBox">{{ authService.createUserMsg }}</h3>
