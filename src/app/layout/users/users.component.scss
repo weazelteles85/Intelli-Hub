@@ -105,4 +105,11 @@
     background: #e2e2e2;
 }
 
+.input-group>.input-group-prepend {
+    flex: 0 0 15%;
+}
+.input-group .input-group-text {
+    width: 100%;
+}
+
 
