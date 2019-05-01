@@ -54,11 +54,19 @@ export class DataManagementService {
     }).valueChanges();
   }
 
-  getContentByTag(tagClient: string, schema: string) {
+  getContentByTag(permissionName: string, schema: string) {
+    console.log(permissionName);
     return this.afs.collection('fl_content', ref => {
-      return ref.where('clientName', 'array-contains', tagClient).where('_fl_meta_.schema', '==', schema);
+      return ref.where('Location', 'array-contains', permissionName).where('_fl_meta_.schema', '==', schema);
     }).valueChanges();
   }
+
+  // THE BELLOW FUNCITON GETS THE CONTENT BY TAG USING THE CLIENTNAME
+  // getContentByTag(tagClient: string, schema: string) {
+  //   return this.afs.collection('fl_content', ref => {
+  //     return ref.where('clientName', 'array-contains', tagClient).where('_fl_meta_.schema', '==', schema);
+  //   }).valueChanges();
+  // }
 
   getImageURL(file: string) {
     const middleDefaultSize: string = '/o/flamelink%2Fmedia%2F';

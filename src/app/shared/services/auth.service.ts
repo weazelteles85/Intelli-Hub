@@ -49,14 +49,13 @@ export class AuthService implements OnInit {
     const permissionDocRef = this.getFirestoreRef('/fl_permissions/' + permission._fl_meta_.docId);
     this.isLoading = true;
     return this.FlUser.map((user) => {
-      //console.log(user);
       const newUser = {
-        firstName: fName, 
-        lastName: lName, 
+        firstName: fName,
+        lastName: lName,
         displayName: username,
-        email: email, 
-        enabled: 'Yes', 
-        id: '', 
+        email: email,
+        enabled: 'Yes',
+        id: '',
         permissions: permissionDocRef.path,
         password: password,
         createdBy: user.id,
@@ -67,13 +66,13 @@ export class AuthService implements OnInit {
       console.log(newUser);
       return this.http.post(this.createUserURL, newUser, { responseType: 'text' }).subscribe(
         (res) => {
-          this.isLoading = false
+          this.isLoading = false;
           console.log(res);
           this.createUserMsg = res;
           setTimeout(() => this.resetMsg(), 4000)
         },
         (err) => {
-          this.isLoading = false
+          this.isLoading = false;
           console.error(err);
           this.createUserMsg = err.error;
           setTimeout(() => this.resetMsg(), 5000)
@@ -87,14 +86,14 @@ export class AuthService implements OnInit {
     client:string, locations: Array<string>, permissions:firebase.firestore.DocumentReference, permissionList: Array<string>) {
     this.isLoading = true;
     return this.FlUser.map((user) => {
-      //console.log(user);
+      // console.log(user);
       const newUser = {
-        firstName: fName, 
-        lastName: lName, 
+        firstName: fName,
+        lastName: lName,
         displayName: username,
-        email: email, 
-        enabled: 'Yes', 
-        id: '', 
+        email: email,
+        enabled: 'Yes',
+        id: '',
         permissions: permissions.path,
         password: password,
         createdBy: user.id,
@@ -105,13 +104,13 @@ export class AuthService implements OnInit {
       console.log(newUser);
       return this.http.post(this.createUserURL, newUser, { responseType: 'text' }).subscribe(
         (res) => {
-          this.isLoading = false
+          this.isLoading = false;
           console.error(res);
           this.createUserMsg = res;
           setTimeout(() => this.resetMsg(), 4000)
         },
         (err) => {
-          this.isLoading = false
+          this.isLoading = false;
           console.error(err);
           this.createUserMsg = err.error;
           setTimeout(() => this.resetMsg(), 5000)
@@ -130,31 +129,30 @@ export class AuthService implements OnInit {
       .auth
       .signInWithEmailAndPassword(email, password)
       .then(value => {
-        //console.log('Nice, it worked!');
+        // console.log('Nice, it worked!');
         localStorage.setItem('mdtoken', value.user.refreshToken)
         localStorage.setItem('uid', value.user.uid);
         localStorage.setItem('email', value.user.email);
         this.afs.doc(`fl_users/${value.user.uid}`).valueChanges().subscribe((user:FlUser) => {
-          if(user.enabled == 'Yes') {
-            this.loginDisabledMsg = ''
+          if (user.enabled === 'Yes') {
+            this.loginDisabledMsg = '';
             this.router.navigate(['/']);
-          }
-          else {
+          } else {
             this.loginDisabledMsg = 'This User Profile has been disabled, please contact your Admin for access'
             this.logout();
             setTimeout(() => this.resetMsg(), 8000)
           }
-        })
-        //this.router.navigate(['/']);
+        });
+        // this.router.navigate(['/']);
       })
       .catch(err => {
         // console.log('Something went wrong:', err.message);
-        //swal('Oops!', err.message, 'error');
+        // swal('Oops!', err.message, 'error');
       });
   }
 
   getFirestoreRef(docRef: string) {
-    //return firebase.database().ref().
+    // return firebase.database().ref().
     return this.afs.doc(docRef).ref;
   }
 
@@ -198,17 +196,17 @@ export class AuthService implements OnInit {
   }
 
   async changePassword(currentPassword: string, newPassword: string): Promise<string> {
-    var currentUserEmail = this.afAuth.auth.currentUser.email;
+    const currentUserEmail = this.afAuth.auth.currentUser.email;
     try {
-      var user = await this.afAuth.auth.signInWithEmailAndPassword(currentUserEmail, currentPassword);
+      const user = await this.afAuth.auth.signInWithEmailAndPassword(currentUserEmail, currentPassword);
       if (user.user.isAnonymous)
-        return "invalid user";
+        return 'invalid user';
     } catch (error) {
-      return "Current password is invalid !";
+      return "The current password you entered is invalid!";
     }
     try {
       await this.afAuth.auth.currentUser.updatePassword(newPassword);
-      return null;
+      return 'Password Changed!';
     } catch (error) {
       return error.message;
     }

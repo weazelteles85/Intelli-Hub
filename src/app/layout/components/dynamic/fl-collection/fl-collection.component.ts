@@ -7,6 +7,7 @@ import { Content } from '../../../../core/Content.interface';
 import { AuthService } from '../../../../shared/services/auth.service';
 import { FlUser } from '../../../../core/User.interface';
 import { DomSanitizer } from '@angular/platform-browser';
+import { PermissionService } from '../../../../shared/services/permission.service';
 
 @Component({
   selector: 'app-fl-collection',
@@ -20,13 +21,16 @@ export class FlCollectionComponent implements OnInit {
   multipleContents: Array<Object> = new Array<Object>();
   isLoading = true;
 
-  constructor(private dataManager: DataManagementService, private authService: AuthService, private sanitizer: DomSanitizer) { }
+  // PermissionServices is only iported for getting content by Location
+  constructor(private dataManager: DataManagementService, private authService: AuthService, private sanitizer: DomSanitizer,
+    private permissions: PermissionService) { }
 
-  ngOnInit() {
-    this.authService.FlUser.subscribe((user) => this.dataManager.getContentByTag(user.client, this.schemaSelected._fl_meta_.fl_id)
+  ngOnInit() { // THE COMMENTED OUT CODE IS GETTING THE CONTENT BY TAG USING THE CLIENTNAME, COMMENT OUT THE FOLLOWING LINE OF CODE TO RETURN TO THIS
+    //this.authService.FlUser.subscribe((user) => this.dataManager.getContentByTag(user.client, this.schemaSelected._fl_meta_.fl_id)
+    this.authService.FlUser.subscribe((user) => this.dataManager.getContentByTag(this.permissions.localPermission.name, this.schemaSelected._fl_meta_.fl_id)
     .subscribe((contents) => {
       if (contents.length == 1) { // <-- *** CONTENT QUERY RETURNED ONE RESULT ***
-        console.log('1 content found inside Collections Schema Tree')
+        console.log('1 content found inside Collections Schema Tree');
         this.isLoading = false;
         this.currentContent = contents[0];
         console.log(contents[0]);

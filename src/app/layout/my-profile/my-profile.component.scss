@@ -1,0 +1,21 @@
+.input-group>.input-group-prepend {
+    flex: 0 0 20%;
+}
+.input-group .input-group-text {
+    width: 100%;
+}
+
+.form-control.ng-touched.ng-invalid {
+    border: 2px solid red;
+}
+
+.toastBox {
+    text-align: center;
+    margin: auto;
+    width: 50%;
+    color: white;
+    padding: 10px;
+    background-color: #003147;
+    border: 2px solid #ced4da;
+    border-radius: 8px;
+}

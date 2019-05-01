@@ -22,14 +22,14 @@ export class UsersComponent implements OnInit {
   isSelectUserPermission = false;
   isEditMode = false;
   isCreateUserMode = false;
-  editUserForm: FormGroup
+  editUserForm: FormGroup;
   userObservable: Observable<FlUser> = new Observable<FlUser>();
   usersList: Array<FlUser> = new Array<FlUser>();
   localLocationsList: Array<string> = [];
   selectedUser: FlUser;
-  emailFilter: string = '';
-  clientFilter: string = '';
-  toastMsg: string = ''
+  emailFilter = '';
+  clientFilter = '';
+  toastMsg = '';
 
   @ViewChild('idInput') idInput: ElementRef;
 
@@ -276,7 +276,7 @@ export class UsersComponent implements OnInit {
 
     this.authService.updateUserData(editedUser).then((value) => {
       this.toastMsg = 'User Has Been Updated';
-      setTimeout(() => this.resetToast(), 2000)
+      setTimeout(() => this.resetToast(), 2000);
     });
     this.storedPermission = this.localSelectedUserPermission;
     this.closeEdit();

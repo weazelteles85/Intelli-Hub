@@ -5,6 +5,7 @@ import { DynamicComponent } from './components/dynamic/dynamic.component';
 import { AuthGuard } from '../shared';
 import { RegisterUserComponent } from './register-user/register-user.component';
 import { UsersComponent } from './users/users.component';
+import { MyProfileComponent } from './my-profile/my-profile.component';
 
 const routes: Routes = [
     {
@@ -15,8 +16,9 @@ const routes: Routes = [
             { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
             //{ path: 'charts', loadChildren: './charts/charts.module#ChartsModule' },
             { path: 'dynamic', component: DynamicComponent, canActivate: [AuthGuard] },
-            { path: 'register-user', component: RegisterUserComponent, canActivate: [AuthGuard] },
+            //{ path: 'register-user', component: RegisterUserComponent, canActivate: [AuthGuard] },
             { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
+            { path: 'my-profile', component: MyProfileComponent, canActivate: [AuthGuard] },
            // { path: 'tables', loadChildren: './tables/tables.module#TablesModule' },
            // { path: 'forms', loadChildren: './form/form.module#FormModule' },
            // { path: 'bs-element', loadChildren: './bs-element/bs-element.module#BsElementModule' },

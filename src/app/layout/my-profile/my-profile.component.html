@@ -1,0 +1,91 @@
+<div class="row">
+  <div class="col col-xs-12">
+    <h2>My Profile</h2>
+  </div>
+</div>
+<hr>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-10">
+      <form [formGroup]="editUserForm">
+        <!-- DISPLAY NAME -->
+        <div class="input-group mb-1">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Display Name</span>
+          </div>
+          <input [attr.disabled]="isReadOnly ? '' : null" formControlName="displayName" type="text"
+            class="form-control">
+        </div>
+        <!-- FIRST NAME -->
+        <div class="input-group mb-1">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">First Name</span>
+          </div>
+          <input [attr.disabled]="isReadOnly ? '' : null" formControlName="firstName" type="text" class="form-control">
+        </div>
+        <!-- LAST NAME -->
+        <div class="input-group mb-1">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Last Name</span>
+          </div>
+          <input [attr.disabled]="isReadOnly ? '' : null" formControlName="lastName" type="text" class="form-control">
+        </div>
+
+        <!-- EMAIL -->
+        <div class="input-group mb-1">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Email</span>
+          </div>
+          <input disabled formControlName="email" type="email" class="form-control">
+        </div>
+        <!-- CURRENT PASSWORD -->
+        <div *ngIf="isChangePassword" class="input-group mb-1">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Current Password</span>
+          </div>
+          <input formControlName="currentPassword" type="password" class="form-control"
+            matTooltip="Password must be minimum 8 characters">
+        </div>
+        <!-- NEW PASSWORD -->
+        <div *ngIf="isChangePassword" class="input-group mb-1">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">New Password</span>
+          </div>
+          <input (input)="resetConfirmPassword()" formControlName="password" type="password" class="form-control"
+            matTooltip="Password must be minimum 8 characters">
+        </div>
+        <!-- CONFIRM PASSWORD -->
+        <div *ngIf="isChangePassword" class="input-group mb-1">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Confirm Password</span>
+          </div>
+          <input (input)="checkIfPasswordsMatches($event.target.value)" formControlName="confirmPassword"
+            type="password" class="form-control" matTooltip="Password must be matched">
+        </div>
+        {{ passMessage }}
+      </form>
+      <button *ngIf="isReadOnly && !isChangePassword" (click)="isChangePassword = true" type="button"
+        class="btn btn-danger">Change Password</button>
+      <button *ngIf="!isReadOnly || isChangePassword" (click)="onCancelEditForm()" type="button"
+        class="btn btn-danger">Cancel</button>
+      <div class="pull-right">
+        <button *ngIf="isReadOnly && !isChangePassword" (click)="isReadOnly = false" type="button"
+          class="btn btn-success">Edit</button>
+        <button *ngIf="!isReadOnly && !isChangePassword" (click)="onUpdateProfile()" type="button"
+          class="btn btn-success">Save</button>
+        <button *ngIf="isChangePassword" (click)="onChangePassword()" type="button" class="btn btn-success" 
+        [disabled]="!editUserForm.valid">Confirm New
+          Password</button>
+      </div>
+    </div>
+    <div class="col-12">
+      <h3 *ngIf="toastMsg" class="toastBox">{{ toastMsg }}</h3>
+      <div *ngIf="isLoading" class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
+    </div>
+  </div>
+</div>

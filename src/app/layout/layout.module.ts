@@ -16,6 +16,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RegisterUserComponent } from './register-user/register-user.component';
 import { UsersComponent } from './users/users.component';
 import { ScriptsComponent } from './components/scripts/scripts.component';
+import { MyProfileComponent } from './my-profile/my-profile.component';
 
 
 
@@ -30,6 +31,6 @@ import { ScriptsComponent } from './components/scripts/scripts.component';
         AlertModule.forRoot()
     ],
     declarations: [LayoutComponent, SidebarComponent, HeaderComponent, 
-        DynamicComponent, FlSingleComponent, FlFormComponent, FlCollectionComponent, RegisterUserComponent,  UsersComponent, ScriptsComponent]
+        DynamicComponent, FlSingleComponent, FlFormComponent, FlCollectionComponent, RegisterUserComponent,  UsersComponent, ScriptsComponent, MyProfileComponent]
 })
 export class LayoutModule {}
