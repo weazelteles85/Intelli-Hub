@@ -13,6 +13,7 @@ import { PermissionService } from '../../../shared/services/permission.service';
     styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit {
+    isStaticMenuActive: boolean = false;
     mainAppNavId: string = "mainAppNavigation"; //<--- The main navigation must have this under their id
     isActive: boolean = false;
     showMenu: string = '';
@@ -84,6 +85,10 @@ export class SidebarComponent implements OnInit {
 
     showHideSubmenu(navItem: NavItem) {
         navItem.isActive = !navItem.isActive;
+    }
+
+    showHideStaticSubMenu() {
+        this.isStaticMenuActive = !this.isStaticMenuActive;
     }
 
     eventCalled() {

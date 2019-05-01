@@ -7,6 +7,16 @@ $topnav-background-color: #004360;
     width: 220px;
     margin-left: 20px;
 }
+.staticSubMenuItem {
+    position: relative;
+    left: -10px;
+    width: 230px;
+    margin-left: 20px;
+}
+
+.paddingLeft {
+    margin-left: 10px;
+}
 
 a {
     margin-left: -10px;
