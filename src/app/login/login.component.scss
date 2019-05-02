@@ -92,4 +92,27 @@ $topnav-background-color: #004360;
         border-radius: 50%;
         border: 2px solid #fff;
     }
+
+    .errorMessage {
+        margin-top: 10px;
+        width: 50%;
+        color: red;
+        padding: 10px;
+        background-color: #ffffff;
+        border: 2px solid #ced4da;
+        border-radius: 8px;
+    }
+
+    .googleButton {
+        margin-top: 40px;
+    }
+
+    .googleButton:hover #hoverMessage {
+        display: block;
+    }
+
+    .googleButton #hoverMessage {
+        margin-top: 10px;
+        display: none;
+    }
 }

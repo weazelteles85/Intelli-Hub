@@ -12,6 +12,8 @@ import { AngularFireDatabase } from 'angularfire2/database';
     animations: [routerTransition()]
 })
 export class LoginComponent implements OnInit {
+
+    logInError = '';
     constructor(public authService: AuthService, public router: Router) { }
     url;
     form = new FormGroup({
@@ -21,8 +23,12 @@ export class LoginComponent implements OnInit {
     ngOnInit() { }
 
     async onLogin() {
+        this.logInError = '';
         await this.authService.login(this.email.value, this.password.value).then((value) => {
             //this.router.navigate(['/']);
+        }).catch((err) => {
+            console.error(err);
+            this.logInError = err;
         });
     }
 
@@ -31,6 +37,23 @@ export class LoginComponent implements OnInit {
     }
     get password() {
         return this.form.get("password");
+    }
+
+    test() {
+        //this.authService.testGetAuthInfo();
+        console.log(this.logInError);
+        //this.authService.logout();
+    }
+
+    async onLoginWithGoogle() {
+        this.logInError = '';
+        await this.authService.signInWithGoogle().then((result) => {
+            console.log('User with Gmail account Found');
+            //this.router.navigateByUrl('/');
+        }).catch((err) => {
+            console.error(err);
+            this.logInError = err;
+        });
     }
 }
 

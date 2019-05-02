@@ -1,7 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 //import swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
@@ -23,8 +23,8 @@ export class AuthService implements OnInit {
   loginDisabledMsg: string = '';
   fireBaseAppVersion: Observable<number> = new Observable<number>();
 
-  constructor(private afAuth: AngularFireAuth, 
-    private afs: AngularFirestore, 
+  constructor(private afAuth: AngularFireAuth,
+    private afs: AngularFirestore,
     public router: Router,
     private http: HttpClient) {
     this.FlUser = afAuth.authState.pipe(switchMap(user => {
@@ -82,8 +82,8 @@ export class AuthService implements OnInit {
   }
 
   // Register New User From Super Admin Account
-  registerUserFromAdmin(username: string, fName: string, lName: string, email: string, password: string, 
-    client:string, locations: Array<string>, permissions:firebase.firestore.DocumentReference, permissionList: Array<string>) {
+  registerUserFromAdmin(username: string, fName: string, lName: string, email: string, password: string,
+    client: string, locations: Array<string>, permissions: firebase.firestore.DocumentReference, permissionList: Array<string>) {
     this.isLoading = true;
     return this.FlUser.map((user) => {
       // console.log(user);
@@ -130,24 +130,22 @@ export class AuthService implements OnInit {
       .signInWithEmailAndPassword(email, password)
       .then(value => {
         // console.log('Nice, it worked!');
-        localStorage.setItem('mdtoken', value.user.refreshToken)
+        this.loginDisabledMsg = '';
+        localStorage.setItem('mdtoken', value.user.refreshToken);
         localStorage.setItem('uid', value.user.uid);
         localStorage.setItem('email', value.user.email);
-        this.afs.doc(`fl_users/${value.user.uid}`).valueChanges().subscribe((user:FlUser) => {
+        this.afs.doc(`fl_users/${value.user.uid}`).valueChanges().subscribe((user: FlUser) => {
           if (user.enabled === 'Yes') {
-            this.loginDisabledMsg = '';
             this.router.navigate(['/']);
           } else {
-            this.loginDisabledMsg = 'This User Profile has been disabled, please contact your Admin for access'
+            this.loginDisabledMsg = 'Error: This user profile has been disabled, please contact your Admin for access';
             this.logout();
-            setTimeout(() => this.resetMsg(), 8000)
           }
         });
         // this.router.navigate(['/']);
       })
       .catch(err => {
-        // console.log('Something went wrong:', err.message);
-        // swal('Oops!', err.message, 'error');
+        return throwError('Error: ' + err.message).toPromise();
       });
   }
 
@@ -156,34 +154,39 @@ export class AuthService implements OnInit {
     return this.afs.doc(docRef).ref;
   }
 
-  // Sign in with Google no longer being used for this app
-  // signInWithGoogle() {
-  //   console.log('login with google called')
-  //   const provider = new firebase.auth.GoogleAuthProvider();
-  //   return this.oAuthLogin(provider);
-  // }
+  testGetAuthInfo() {
+    console.log('User Id is: ');
+    console.log(firebase.auth().currentUser.uid);
+  }
 
-  // private oAuthLogin(provider) {
-  //   return this.afAuth.auth.signInWithPopup(provider)
-  //     .then((credential) => {
-  //       this.FlUser.subscribe((user) => {
-  //         if (!user) {
-  //           const userData: FlUser = {
-  //             displayName: this.afAuth.auth.currentUser.displayName,
-  //             email: this.afAuth.auth.currentUser.email,
-  //             id: this.afAuth.auth.currentUser.uid,
-  //             enabled: 'Yes',
-  //             //permissions: '/fl_permissions/1'
-  //           }
-  //           return this.updateUserData(userData);
-  //         }
-  //         else {
-  //           this.router.navigate(['/'])
-  //           return this.afs.doc(`fl_users/${credential.user.uid}`);
-  //         }
-  //       });
-  //     })
-  // }
+  signInWithGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    return this.oAuthLogin(provider);
+  }
+
+  private oAuthLogin(provider) {
+    return this.afAuth.auth.signInWithPopup(provider).then((credential) => {
+      if (credential.additionalUserInfo.isNewUser) {
+        credential.user.delete();
+        return throwError('Error: No users with the provided Gmail account was found').toPromise();
+      } else {
+        this.afs.doc(`fl_users/${credential.user.uid}`).valueChanges().subscribe((user: FlUser) => {
+          if (user.enabled === 'Yes') {
+            localStorage.setItem('mdtoken', credential.user.refreshToken);
+            localStorage.setItem('uid', credential.user.uid);
+            localStorage.setItem('email', credential.user.email);
+            this.loginDisabledMsg = '';
+            this.router.navigate(['/']);
+            return null;
+          } else {
+            this.logout();
+            this.loginDisabledMsg = 'Error: This user profile has been disabled, please contact your Admin for access';
+            return throwError('Error: This User Profile has been disabled, please contact your Admin for access').toPromise();
+          }
+        });
+      }
+    });
+  }
 
   logout(): Promise<void> {
     return this.afAuth
@@ -220,5 +223,5 @@ export class AuthService implements OnInit {
     return userRef.set(userData, { merge: true });
   }
 
-  
+
 }

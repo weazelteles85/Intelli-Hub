@@ -1,12 +1,13 @@
 <div class="login-page" [@routerTransition]>
     <div class="row justify-content-md-center">
-        <div class="col-md-4">
+        <div class="col-4">
             <img src="assets/images/logo.png" width="150px" class="user-avatar" />
             <h1>Intelli-hub Portal</h1>
             <form [formGroup]="form" (submit)="onLogin()">
                 <div class="form-content">
                     <div class="form-group">
-                        <input formControlName="email" type="text" class="form-control input-underline input-lg" id="txtEmail" matTooltip="Email is required" placeholder="Email">
+                        <input formControlName="email" type="text" class="form-control input-underline input-lg"
+                            id="txtEmail" matTooltip="Email is required" placeholder="Email">
                         <div *ngIf="email.touched && email.invalid" class="alert alert-danger" hidden>
                             <div *ngIf="email.errors.required" class="alert alert-danger" hidden>
 
@@ -17,7 +18,8 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <input formControlName="password" type="password" class="form-control input-underline input-lg" id="txtPassword" matTooltip="Password is required" placeholder="Password">
+                        <input formControlName="password" type="password" class="form-control input-underline input-lg"
+                            id="txtPassword" matTooltip="Password is required" placeholder="Password">
                         <div *ngIf="password.touched && password.invalid" class="alert alert-danger" hidden>
                         </div>
                     </div>
@@ -25,9 +27,21 @@
                 <button class="btn rounded-btn" type="submit"> Log in </button>
                 <!-- <a class="btn rounded-btn" [routerLink]="['/signup']">Register</a> -->
             </form>
-            <div style="margin-top:20px" *ngIf="authService.loginDisabledMsg as msg">
-                {{ msg }}
+        </div>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="googleButton">
+            <button (click)="onLoginWithGoogle()" class="btn rounded-btn" type="submit">Log in with <i
+                    class="fa fa-google"></i>oogle</button>
+            <div id="hoverMessage">You'll only be able to log in with Google if an account was already created for you
             </div>
         </div>
     </div>
+    <div *ngIf="logInError" class="row justify-content-md-center">
+        <p class="errorMessage"><strong>{{ logInError }}</strong></p>
+    </div>
+    <div *ngIf="authService.loginDisabledMsg as msg" class="row justify-content-md-center">
+        <p class="errorMessage"><strong>{{ msg }}</strong></p>
+    </div>
+    <!-- <button (click)="test()" type="button" class="btn btn-primary">Test</button> -->
 </div>

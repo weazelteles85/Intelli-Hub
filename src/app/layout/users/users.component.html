@@ -166,7 +166,7 @@
               <div *ngIf="isEditMode || isCreateUserMode">
                 <div class="input-group mb-1 col align-self-end">
                   <div class="input-group-append">
-                    <button (click)="isSelectUserPermission = true" class="btn btn-outline-success btn-sm">Add
+                    <button (click)="isSelectUserPermission = !isSelectUserPermission" class="btn btn-outline-success btn-sm">Add
                       Location</button>
                   </div>
                   <ul *ngIf="isSelectUserPermission"

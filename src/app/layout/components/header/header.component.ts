@@ -11,8 +11,8 @@ import { debug } from 'util';
 })
 export class HeaderComponent implements OnInit {
     pushRightClass: string = 'push-right';
-    userName : string;
-    appVersion: number = 0.9;
+    userName: string;
+    appVersion: string = "0.9.3";
     versionMsg:string = '';
     constructor(private translate: TranslateService, public router: Router, private authSerive : AuthService) {
 
@@ -37,8 +37,8 @@ export class HeaderComponent implements OnInit {
         this.authSerive.fireBaseAppVersion.subscribe((versionObj:any) => {
             console.log(versionObj);
             if(versionObj.version != this.appVersion) {
-                this.versionMsg = ` A newer version available (${versionObj.version}) 
-                Try refreshing your browser or clearing your cookies to view it`
+                this.versionMsg = ` A newer version is available, (${versionObj.version})
+                Try refreshing your browser or clearing your cookies to view it`;
             }
         })
     }

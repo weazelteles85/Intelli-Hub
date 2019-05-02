@@ -154,7 +154,11 @@ export class UsersComponent implements OnInit {
 
   openPermissionGroup() {
     if (this.isEditMode || this.isCreateUserMode) {
-      this.isSelectPermission = true;
+      if(this.isSelectPermission) {
+        this.isSelectPermission = false;
+      } else {
+        this.isSelectPermission = true;
+      }
     }
   }
 

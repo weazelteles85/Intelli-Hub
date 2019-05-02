@@ -10,21 +10,10 @@
             <h3>Welcome {{ user.displayName }}</h3>
             <p>What would you like to do this {{ dayTimeRef }}</p>
         </div>
-        <div class="col">
-            <button type="button" class="btn btn-primary pull-right">Edit Profile</button>
-        </div>
     </div>
 </div>
 <div class="container-fluid" [ngClass]="{sidebarPushRight: isActive}">
     <div class="row list-inline">
-        <div [routerLink]="['/users']" class="list-group-item" *ngIf="isSchemaPermited('users')">
-            <i class="col col-12 fa fa-users"></i>
-            <p class="text-center text-uppercase">Users</p>
-        </div>
-        <div [routerLink]="['/register-user']" class="list-group-item" *ngIf="isSchemaPermited('users')">
-            <i class="col col-12 fa fa-user-plus"></i>
-            <p class="text-center text-uppercase">Create Users</p>
-        </div>
         <!-- ********   this for loops builds the entire navigation list ********  -->
         <div *ngFor="let navItem of localMainAppNavigation">
             <div *ngIf="navItem.childIndex; else toLink">
@@ -67,6 +56,18 @@
                 </div>
             </ng-template>
         </div>
+        <div [routerLink]="['/my-profile']" class="list-group-item">
+            <i class="col col-12 fa fa-user-circle"></i>
+            <p class="text-center text-uppercase">My Profile</p>
+        </div>
+        <div [routerLink]="['/users']" class="list-group-item" *ngIf="isSchemaPermited('users')">
+            <i class="col col-12 fa fa-users"></i>
+            <p class="text-center text-uppercase">Users</p>
+        </div>
+        <!-- <div [routerLink]="['/register-user']" class="list-group-item" *ngIf="isSchemaPermited('createUser')">
+            <i class="col col-12 fa fa-user-plus"></i>
+            <p class="text-center text-uppercase">Create Users</p>
+        </div> -->
     </div>
 </div>
 
