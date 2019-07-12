@@ -12,7 +12,7 @@ import { debug } from 'util';
 export class HeaderComponent implements OnInit {
     pushRightClass: string = 'push-right';
     userName: string;
-    appVersion: string = "0.9.3";
+    appVersion: string = "0.9.4.1";
     versionMsg:string = '';
     constructor(private translate: TranslateService, public router: Router, private authSerive : AuthService) {
 

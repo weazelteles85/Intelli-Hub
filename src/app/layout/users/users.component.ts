@@ -342,4 +342,8 @@ export class UsersComponent implements OnInit {
     } else return 'list-group-item'
   }
 
+  testAddmemberToGroup() {
+    this.authService.addNewMemberToGoogleGroup();
+  }
+
 }

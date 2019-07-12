@@ -7,14 +7,15 @@ import { Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { FlUser } from '../../core/User.interface';
 import * as firebase from 'firebase/app';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Permission } from '../../core/Permission.interface';
 import { DatabaseReference } from '@angular/fire/database/interfaces';
-
+import { GoogleAuthService, GoogleApiModule, GoogleApiService } from 'ng-gapi';
+import * as ClientOAuth2 from 'client-oauth2';
+//import { adminSDK } from '../../../environments/environment';
 
 @Injectable()
 export class AuthService implements OnInit {
-
   isLoading = false;
   FlUser: Observable<FlUser>;
   localUser: FlUser;
@@ -104,19 +105,81 @@ export class AuthService implements OnInit {
       console.log(newUser);
       return this.http.post(this.createUserURL, newUser, { responseType: 'text' }).subscribe(
         (res) => {
+          //this.addNewMemberToGoogleGroup();
           this.isLoading = false;
           console.error(res);
           this.createUserMsg = res;
-          setTimeout(() => this.resetMsg(), 4000)
+          setTimeout(() => this.resetMsg(), 4000);
         },
         (err) => {
           this.isLoading = false;
           console.error(err);
           this.createUserMsg = err.error;
-          setTimeout(() => this.resetMsg(), 5000)
+          setTimeout(() => this.resetMsg(), 5000);
         }
       )
     }).toPromise();
+  }
+
+  addNewMemberToGoogleGroup() {
+
+    //CALL CLOUD FUNCTION METHOD
+    const headers = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+  }
+    const data = {
+      // clientId: adminSDK.client_id,
+      // clientSecret: adminSDK.private_key,
+      // accessTokenUri: adminSDK.token_uri,
+      // authorizationUri: adminSDK.auth_uri,
+      // redirectUri: 'http://localhost:4200/users'
+    };
+
+    this.http.get('https://us-central1-flamelink-6f78e.cloudfunctions.net/addUserToGroup', {headers}).subscribe(
+      (variable) => {
+        console.log('Successfull Initial Response, Token Bellow');
+        console.log(variable);
+      },
+      (err) => {
+        console.log('Error');
+        console.error(err.error);
+      });
+
+
+    //ORIGINAL LOCAL CALL METHOD
+    const appAuth = new ClientOAuth2({
+      clientId: '881003242822-87i2l47k8gr3hfvb33g8f6gh1d75boad.apps.googleusercontent.com',
+      //clientSecret: 'jYor8ImCKcFIKNrNvl4nIrn8',
+      //redirectUri: 'http://localhost:4200/users'
+    });
+
+    this.FlUser.subscribe((user) => {
+      const member = {
+        'delivery_settings': 'ALL_MAIL',
+        'email': 'artisanfieldservices@gmail.com',
+        'role': 'MEMBER',
+        'status': 'ACTIVE'
+      };
+
+      const headers = new HttpHeaders().set('Authorization', 'Bearer ya29.GlwqB_fQ48hRU7VZg67Qgp1jTIkpvrvyvvJxndngS3_Qtcdl0U3sAivOuX-hsX0A9Ac7-j51Y4vpG_orah9eT-nAtqGyVko-ITSWefUFdkfBqsnGXIjN6yNIVgGrbw');
+          this.http.post(
+            'https://www.googleapis.com/admin/directory/v1/groups/testgroup@telesapps.com/members',
+            member, { headers }).subscribe(
+              (res) => {
+                console.log(res);
+                console.log('Holy Crap it finally worked... Maybe');
+              },
+              (err) => {
+                console.log('NOPE, second one failed');
+                console.error(err);
+              }
+            );
+
+
+    });
+
   }
 
   resetMsg() {
@@ -131,6 +194,7 @@ export class AuthService implements OnInit {
       .then(value => {
         // console.log('Nice, it worked!');
         this.loginDisabledMsg = '';
+
         localStorage.setItem('mdtoken', value.user.refreshToken);
         localStorage.setItem('uid', value.user.uid);
         localStorage.setItem('email', value.user.email);
@@ -172,6 +236,7 @@ export class AuthService implements OnInit {
       } else {
         this.afs.doc(`fl_users/${credential.user.uid}`).valueChanges().subscribe((user: FlUser) => {
           if (user.enabled === 'Yes') {
+            sessionStorage.setItem('token', credential.user.refreshToken);
             localStorage.setItem('mdtoken', credential.user.refreshToken);
             localStorage.setItem('uid', credential.user.uid);
             localStorage.setItem('email', credential.user.email);
@@ -186,6 +251,10 @@ export class AuthService implements OnInit {
         });
       }
     });
+  }
+
+  updateSigninStatus() {
+
   }
 
   logout(): Promise<void> {

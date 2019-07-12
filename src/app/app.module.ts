@@ -18,11 +18,12 @@ import {AuthGuardService} from './shared/services/auth.guard.service';
 import { FormsModule } from '@angular/forms';
 import {MatTooltipModule} from '@angular/material';
 import {AngularFirestoreModule} from 'angularfire2/firestore'
-import{FirebaseService} from './shared/services/firebase.service'
+import {FirebaseService} from './shared/services/firebase.service'
 import { environment } from '../environments/environment';
 import { DataManagementService } from './shared/services/data-management.service';
 import { PermissionService } from './shared/services/permission.service';
 import { StaticSchemaService } from './shared/services/static-schema.service';
+import { GoogleApiModule, NgGapiClientConfig, NG_GAPI_CONFIG  } from 'ng-gapi';
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
@@ -31,8 +32,21 @@ export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
+let gapiClientConfig: NgGapiClientConfig = {
+    client_id: '645434776074-n3ishss7dmctgl54ls63pqvnvrildekj.apps.googleusercontent.com',
+    discoveryDocs: ['https://analyticsreporting.googleapis.com/$discovery/rest?version=v4'],
+    scope: [
+        'https://www.googleapis.com/auth/admin.directory.group.member',
+        'https://www.googleapis.com/auth/admin.directory.group'
+    ].join(' ')
+};
+
 @NgModule({
     imports: [
+        GoogleApiModule.forRoot({
+            provide: NG_GAPI_CONFIG,
+            useValue: gapiClientConfig
+        }),
         CommonModule,
         FormsModule,
         BrowserModule,
