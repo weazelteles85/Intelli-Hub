@@ -5,6 +5,7 @@ import { LoginRoutingModule } from './login-routing.module';
 import { LoginComponent } from './login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material';
+import { LoginAsAdminComponent } from './login-as-admin/login-as-admin.component';
 
 @NgModule({
     imports: [CommonModule, 
@@ -12,6 +13,6 @@ import { MatTooltipModule } from '@angular/material';
         FormsModule,
         ReactiveFormsModule,
         MatTooltipModule],
-    declarations: [LoginComponent]
+    declarations: [LoginComponent, LoginAsAdminComponent]
 })
 export class LoginModule {}

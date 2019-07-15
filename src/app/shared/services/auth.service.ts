@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable, of, throwError } from 'rxjs';
 import { Router } from '@angular/router';
@@ -8,7 +8,6 @@ import { FlUser } from '../../core/User.interface';
 import * as firebase from 'firebase/app';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Permission } from '../../core/Permission.interface';
-import * as ClientOAuth2 from 'client-oauth2';
 
 @Injectable()
 export class AuthService implements OnInit {
@@ -117,32 +116,7 @@ export class AuthService implements OnInit {
     }).toPromise();
   }
 
-  addNewMemberToGoogleGroup() {
-
-    //CALL CLOUD FUNCTION METHOD
-    const headers = {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-  }
-
-    this.http.get('https://us-central1-flamelink-6f78e.cloudfunctions.net/addUserToGroup', {headers}).subscribe(
-      (variable) => {
-        console.log('Successfull Initial Response, Token Bellow');
-        console.log(variable);
-      },
-      (err) => {
-        console.log('Error');
-        console.error(err.error);
-      });
-
-
-    //ORIGINAL LOCAL CALL METHOD
-    const appAuth = new ClientOAuth2({
-      clientId: '881003242822-87i2l47k8gr3hfvb33g8f6gh1d75boad.apps.googleusercontent.com',
-      //clientSecret: 'jYor8ImCKcFIKNrNvl4nIrn8',
-      //redirectUri: 'http://localhost:4200/users'
-    });
+  addNewMemberToGoogleGroup(groupToAddTo: string, accessToken: string) {
 
     this.FlUser.subscribe((user) => {
       const member = {
@@ -152,19 +126,19 @@ export class AuthService implements OnInit {
         'status': 'ACTIVE'
       };
 
-      const headers = new HttpHeaders().set('Authorization', 'Bearer ya29.GlwqB_fQ48hRU7VZg67Qgp1jTIkpvrvyvvJxndngS3_Qtcdl0U3sAivOuX-hsX0A9Ac7-j51Y4vpG_orah9eT-nAtqGyVko-ITSWefUFdkfBqsnGXIjN6yNIVgGrbw');
-          this.http.post(
-            'https://www.googleapis.com/admin/directory/v1/groups/testgroup@telesapps.com/members',
-            member, { headers }).subscribe(
-              (res) => {
-                console.log(res);
-                console.log('Holy Crap it finally worked... Maybe');
-              },
-              (err) => {
-                console.log('NOPE, second one failed');
-                console.error(err);
-              }
-            );
+      const headers = new HttpHeaders().set('Authorization', 'Bearer ' + accessToken);
+      this.http.post(
+        'https://www.googleapis.com/admin/directory/v1/groups/testgroup@telesapps.com/members',
+        member, { headers }).subscribe(
+          (res) => {
+            console.log(res);
+            console.log('Member Added to Google Groups');
+          },
+          (err) => {
+            console.error('Something went wrong');
+            console.error(err);
+          }
+        );
 
 
     });
@@ -239,6 +213,32 @@ export class AuthService implements OnInit {
           }
         });
       }
+    });
+  }
+
+  signInWithGoogleAsAdmin() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('https://www.googleapis.com/auth/admin.directory.group.member');
+    provider.addScope('https://www.googleapis.com/auth/admin.directory.group');
+    return this.oAuthLoginAsAdmin(provider);
+  }
+
+  private oAuthLoginAsAdmin(provider) {
+    return this.afAuth.auth.signInWithPopup(provider).then((result: any) => {
+      this.afs.doc(`fl_users/${result.user.uid}`).valueChanges().subscribe((user: FlUser) => {
+        sessionStorage.setItem('token', result.credential.accessToken);
+        localStorage.setItem('mdtoken', result.user.refreshToken);
+        localStorage.setItem('uid', result.user.uid);
+        localStorage.setItem('email', result.user.email);
+        this.localUser.accessToken = result.credential.accessToken;
+        this.localUser.refreshToken = result.user.refreshToken;
+        this.updateUserData(this.localUser);
+        this.loginDisabledMsg = '';
+        this.router.navigate(['/']);
+        return null;
+
+      });
+
     });
   }
 

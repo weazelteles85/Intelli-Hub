@@ -16,4 +16,6 @@ export interface FlUser {
     locations?: Array<string>;
     permissions: firebase.firestore.DocumentReference;
     permissionsList?: Array<string>;
+    accessToken?: string;
+    refreshToken?: string;
 }

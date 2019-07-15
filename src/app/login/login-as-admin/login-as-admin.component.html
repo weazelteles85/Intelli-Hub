@@ -1,0 +1,21 @@
+<div class="login-page" [@routerTransition]>
+  <div class="row justify-content-md-center">
+      <div class="col-4">
+          <img src="assets/images/logo.png" width="150px" class="user-avatar" />
+          <h1>Please use your Gmail account to log in as admin one more time</h1>
+      </div>
+  </div>
+  <div class="row justify-content-md-center">
+      <div class="googleButton">
+          <button (click)="onLoginWithGoogle()" class="btn rounded-btn" type="submit">Log in with <i
+                  class="fa fa-google"></i>oogle</button>
+      </div>
+  </div>
+  <div *ngIf="logInError" class="row justify-content-md-center">
+      <p class="errorMessage"><strong>{{ logInError }}</strong></p>
+  </div>
+  <div *ngIf="authService.loginDisabledMsg as msg" class="row justify-content-md-center">
+      <p class="errorMessage"><strong>{{ msg }}</strong></p>
+  </div>
+  <!-- <button (click)="test()" type="button" class="btn btn-primary">Test</button> -->
+</div>
