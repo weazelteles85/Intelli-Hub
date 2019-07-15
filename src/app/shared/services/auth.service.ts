@@ -2,17 +2,13 @@ import { Injectable, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable, of, throwError } from 'rxjs';
-//import swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { FlUser } from '../../core/User.interface';
 import * as firebase from 'firebase/app';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Permission } from '../../core/Permission.interface';
-import { DatabaseReference } from '@angular/fire/database/interfaces';
-import { GoogleAuthService, GoogleApiModule, GoogleApiService } from 'ng-gapi';
 import * as ClientOAuth2 from 'client-oauth2';
-//import { adminSDK } from '../../../environments/environment';
 
 @Injectable()
 export class AuthService implements OnInit {
@@ -129,13 +125,6 @@ export class AuthService implements OnInit {
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization'
   }
-    const data = {
-      // clientId: adminSDK.client_id,
-      // clientSecret: adminSDK.private_key,
-      // accessTokenUri: adminSDK.token_uri,
-      // authorizationUri: adminSDK.auth_uri,
-      // redirectUri: 'http://localhost:4200/users'
-    };
 
     this.http.get('https://us-central1-flamelink-6f78e.cloudfunctions.net/addUserToGroup', {headers}).subscribe(
       (variable) => {
