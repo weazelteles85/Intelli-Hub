@@ -98,12 +98,13 @@ export class AuthService implements OnInit {
         permList: permissionList
       };
       console.log(newUser);
-      return this.http.post(this.createUserURL, newUser, { responseType: 'text' }).subscribe(
+      return this.http.post(this.createUserURL, newUser).subscribe(
         (res) => {
           //this.addNewMemberToGoogleGroup();
           this.isLoading = false;
-          console.error(res);
-          this.createUserMsg = res;
+          this.createUserMsg = 'New User Created';
+          console.log('User Created Admin Token Bellow');
+          console.log(res);
           setTimeout(() => this.resetMsg(), 4000);
         },
         (err) => {

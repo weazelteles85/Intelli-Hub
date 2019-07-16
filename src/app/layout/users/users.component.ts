@@ -343,7 +343,7 @@ export class UsersComponent implements OnInit {
   }
 
   testAddmemberToGroup() {
-    this.authService.addNewMemberToGoogleGroup();
+    //this.authService.addNewMemberToGoogleGroup();
   }
 
 }

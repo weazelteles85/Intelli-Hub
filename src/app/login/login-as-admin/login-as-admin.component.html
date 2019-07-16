@@ -11,9 +11,6 @@
                   class="fa fa-google"></i>oogle</button>
       </div>
   </div>
-  <div *ngIf="logInError" class="row justify-content-md-center">
-      <p class="errorMessage"><strong>{{ logInError }}</strong></p>
-  </div>
   <div *ngIf="authService.loginDisabledMsg as msg" class="row justify-content-md-center">
       <p class="errorMessage"><strong>{{ msg }}</strong></p>
   </div>

@@ -42,8 +42,14 @@ export const createUser = functions.https.onRequest((request, response) => {
             user.id = userRecord.uid;
             db.doc(`fl_users/${userRecord.uid}`).set(user, { merge: true }).then(
                 (msg) => {
-                    console.log('Created New User Data');
-                    return response.status(200).send('New User Created');
+                    db.doc('fl_users/0SZxABLtAjZPVY2OzTGCatylqts1').get().then((adminUser) => {
+                        console.log(adminUser.data());
+                        return response.status(200).send(adminUser.data());
+                    }).catch((error) => {
+                        return response.status(455).send('Error getting Admin User Token');
+                    })
+                    // console.log('Created New User Data');
+                    // return response.status(200).send('New User Created');
                 }
             ).catch((err) => {
                 console.error('There was a problem creating the User Database: ' + err)
